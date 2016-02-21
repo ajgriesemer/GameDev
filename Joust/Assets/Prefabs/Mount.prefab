@@ -11,9 +11,10 @@ GameObject:
   - 212: {fileID: 21238862}
   - 50: {fileID: 5090266}
   - 61: {fileID: 6107774}
+  - 114: {fileID: 11427168}
   m_Layer: 0
-  m_Name: FlyingSprite
-  m_TagString: Untagged
+  m_Name: Mount
+  m_TagString: Warrior
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -61,6 +62,17 @@ BoxCollider2D:
   m_Offset: {x: 0, y: -0.02}
   serializedVersion: 2
   m_Size: {x: 0.21666667, y: 0.3}
+--- !u!114 &11427168
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06f8631f616a1fe44ba97d916d07ff45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &21238862
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -101,6 +113,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Constraints
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: Warrior
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

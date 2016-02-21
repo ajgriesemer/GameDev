@@ -7,8 +7,8 @@ using Newtonsoft.Json.Linq;
 
 public class ControllerInterface : MonoBehaviour {
 
-	public GameObject Bee;
-	private GameObject[] Bees = new GameObject[8];
+    public GameObject Bee;
+    private GameObject[] Bees = new GameObject[8];
     
 	void Awake() {
 		AirConsole.instance.onMessage += OnMessage;
@@ -56,34 +56,26 @@ public class ControllerInterface : MonoBehaviour {
 			if (data ["left"] != null) {
 				//If true the person just pressed the left button
 				if ((bool) data ["left"] == true) {
-					//Set the appropriate variables in the player data component
-					this.Bees[active_player].GetComponent<BeeScript> ().left = true;
-					this.Bees[active_player].GetComponent<BeeScript> ().right = false;
-				//If false the person just released the left button
-				} else {
-					//Just clear false since they could have pressed right before releasing left
-					this.Bees[active_player].GetComponent<BeeScript> ().left = false;
+                    //Set the appropriate variables in the player data component
+                    this.Bees[active_player].GetComponent<BeeScript>().MoveBee(-1, null);
 				}
 			}
 			//If there is data in the left attribute	
 			if (data ["right"] != null) {
 				//If true the person just pressed the right button
-				if ((bool) data ["right"] == true) {
-					//Set the appropriate variables in the player data component
-					this.Bees[active_player].GetComponent<BeeScript> ().left = false;
-					this.Bees[active_player].GetComponent<BeeScript> ().right = true;
-				//If false the person just released the left button
-				} else {
-					//Just clear false since they could have pressed left before releasing right
-					this.Bees[active_player].GetComponent<BeeScript> ().right = false;
-				}
+				if ((bool) data ["right"] == true)
+                {
+                    //Set the appropriate variables in the player data component
+                    this.Bees[active_player].GetComponent<BeeScript>().MoveBee(1, null);
+                }
 			}	
 			//If there is data in the up attribute
 			if (data ["up"] != null) {
-				if ((bool) data ["up"] == true) {
-					//Push the bee up each time the button is pushed
-					this.Bees[active_player].GetComponent<BeeScript> ().mainSprite.GetComponent<Rigidbody2D>().AddForce (Vector2.up * 100.0f);
-				}
+				if ((bool) data ["up"] == true)
+                {
+                    //Set the appropriate variables in the player data component
+                    this.Bees[active_player].GetComponent<BeeScript>().MoveBee(null, true);
+                }
 			}	
 		}
 
