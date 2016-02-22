@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: FieryWarriorAnimator
+  m_Controller: {fileID: 9100000, guid: c3d5d89406441ee4ba03a0d6fa6c9400, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 1364793c509b08e40a9958db04121115, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 88e874bf04d134348946e82a1eb94745, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 58deb84a9fb66d34285997a7bb7392de, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e08ef7c1b18afe24fa6b58dce5cde192, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a82d1cdb98e84e8489f561013b51716e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 101f2f80a0251dd4291248faac22567d, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: ad0ec40199482824083b647c20eab679, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 55b73f1069a158541938028f2642871b, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: d79ba1bfb4d25394bb4497e255549a18, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: aa5ed5359a8c4c741bdbdd111ba38cd2, type: 2}

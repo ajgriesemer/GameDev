@@ -90,11 +90,11 @@ public class ExampleBasicLogic : MonoBehaviour {
 	void Update(){
 		//If any controller is pressing a 'Rotate' button, rotate the AirConsole Logo in the scene
 		if (turnLeft) {
-			this.logo.transform.Rotate(0,0,2);
+            logo.transform.Rotate(0,0,2);
 		
 		}
 		else if (turnRight) {
-			this.logo.transform.Rotate(0,0,-2);
+            logo.transform.Rotate(0,0,-2);
 		}
 	}
 

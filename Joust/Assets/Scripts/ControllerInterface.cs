@@ -25,7 +25,10 @@ public class ControllerInterface : MonoBehaviour {
 		int active_player = AirConsole.instance.ConvertDeviceIdToPlayerNumber(device_id);
 		//Create a new player GameObject for that person
 		Bees [active_player] = (GameObject) Instantiate (Bee, Vector3.zero, Quaternion.identity);
-		Debug.Log (active_player);
+        Bees[active_player].GetComponent<BeeScript>().PlayerNumber = active_player;
+        Bees[active_player].GetComponent<BeeScript>().TeamNumber = active_player%3;
+
+        Debug.Log (active_player);
 	}
 
 	//Called (a little bit after) a controller disconnects
@@ -57,7 +60,7 @@ public class ControllerInterface : MonoBehaviour {
 				//If true the person just pressed the left button
 				if ((bool) data ["left"] == true) {
                     //Set the appropriate variables in the player data component
-                    this.Bees[active_player].GetComponent<BeeScript>().MoveBee(-1, null);
+                    Bees[active_player].GetComponent<BeeScript>().MoveBee(-1, null);
 				}
 			}
 			//If there is data in the left attribute	
@@ -66,7 +69,7 @@ public class ControllerInterface : MonoBehaviour {
 				if ((bool) data ["right"] == true)
                 {
                     //Set the appropriate variables in the player data component
-                    this.Bees[active_player].GetComponent<BeeScript>().MoveBee(1, null);
+                    Bees[active_player].GetComponent<BeeScript>().MoveBee(1, null);
                 }
 			}	
 			//If there is data in the up attribute
@@ -74,7 +77,7 @@ public class ControllerInterface : MonoBehaviour {
 				if ((bool) data ["up"] == true)
                 {
                     //Set the appropriate variables in the player data component
-                    this.Bees[active_player].GetComponent<BeeScript>().MoveBee(null, true);
+                    Bees[active_player].GetComponent<BeeScript>().MoveBee(null, true);
                 }
 			}	
 		}
