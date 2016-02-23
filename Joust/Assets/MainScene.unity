@@ -375,7 +375,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 455186, guid: 1af50bb2178f8514f8515f31bff4e158, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -0.027612882
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 455186, guid: 1af50bb2178f8514f8515f31bff4e158, type: 2}
       propertyPath: m_LocalPosition.z
@@ -401,14 +401,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 11495606, guid: 1af50bb2178f8514f8515f31bff4e158, type: 2}
-      propertyPath: MainCamera
-      value: 
-      objectReference: {fileID: 621514878}
-    - target: {fileID: 11495606, guid: 1af50bb2178f8514f8515f31bff4e158, type: 2}
-      propertyPath: deadPrefab
-      value: 
-      objectReference: {fileID: 186776, guid: a80aac012496e404c80d8d9b776cc4f8, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1af50bb2178f8514f8515f31bff4e158, type: 2}
   m_IsPrefabParent: 0

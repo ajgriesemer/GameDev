@@ -5,8 +5,8 @@ public delegate void PlayerDeath();
 
 public class MountScript : MonoBehaviour {
     public bool isSecondary = false;
-    public float horizontalInput = 0;
-    public bool upInput = false;
+    private float horizontalInput = 0;
+    private bool upInput = false;
     public event PlayerDeath OnBeeDeath;
 
 	// Use this for initialization
@@ -26,6 +26,16 @@ public class MountScript : MonoBehaviour {
             transform.Find("Rider").GetComponent<SpriteRenderer>().flipX = true;
         }
 
+    }
+
+    void Jump(bool up)
+    {
+        upInput = up;
+    }
+
+    void MoveHorizontal(float input)
+    {
+        horizontalInput = input;
     }
 
     // FixedUpdate is called about once per frame at a regular interval

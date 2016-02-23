@@ -8,9 +8,8 @@ public class BeeScript : MonoBehaviour {
     public GameObject deadPrefab;
     public int TeamNumber;
     public int PlayerNumber;
-    public RuntimeAnimatorController CyanAnimator;
-    public RuntimeAnimatorController FieryAnimator;
-    public RuntimeAnimatorController VultureAnimator;
+    public Sprite[] RiderArray;
+    public RuntimeAnimatorController[] MountArray;
 
     // Use this for initialization
     void Start()
@@ -18,22 +17,8 @@ public class BeeScript : MonoBehaviour {
         //When the Bee object is first created instantiate the mainSprite in the center of the screen
         mainSprite = (GameObject)Instantiate(warriorPrefab, new Vector3(0, 1), Quaternion.identity);
         mainSprite.GetComponent<MountScript>().OnBeeDeath += KillBee;
-        switch (TeamNumber)
-        {
-            case 1:
-                mainSprite.GetComponent<Animator>().runtimeAnimatorController = CyanAnimator;
-                break;
-            case 2:
-                mainSprite.GetComponent<Animator>().runtimeAnimatorController = FieryAnimator;
-                break;
-            case 3:
-                mainSprite.GetComponent<Animator>().runtimeAnimatorController = VultureAnimator;
-                break;
-            default:
-                mainSprite.GetComponent<Animator>().runtimeAnimatorController = CyanAnimator;
-                break;
-        }
-        mainSprite.transform.Find("Rider").GetComponent<SpriteRenderer>().sprite = GetComponent<RiderSpriteArray>().SpriteArray[PlayerNumber];
+        mainSprite.GetComponent<Animator>().runtimeAnimatorController = MountArray[TeamNumber];
+        mainSprite.transform.Find("Rider").GetComponent<SpriteRenderer>().sprite = RiderArray[PlayerNumber];
 
     }
     private void KillBee()
@@ -52,18 +37,18 @@ public class BeeScript : MonoBehaviour {
     {
         if (horizontal != null)
         {
-            mainSprite.GetComponent<MountScript>().horizontalInput = horizontal.Value;
+            mainSprite.SendMessage("MoveHorizontal", horizontal.Value);
             if(secondarySprite != null)
             {
-                secondarySprite.GetComponent<MountScript>().horizontalInput = horizontal.Value;
+                secondarySprite.SendMessage("MoveHorizontal", horizontal.Value);
             }
         }
         if (up != null)
         {
-            mainSprite.GetComponent<MountScript>().upInput = up.Value;
+            mainSprite.SendMessage("Jump", up.Value);
             if (secondarySprite != null)
             {
-                secondarySprite.GetComponent<MountScript>().upInput = up.Value;
+                secondarySprite.SendMessage("Jump", up.Value);
             }
         }
     }

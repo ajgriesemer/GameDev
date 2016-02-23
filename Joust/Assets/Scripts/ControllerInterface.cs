@@ -26,7 +26,7 @@ public class ControllerInterface : MonoBehaviour {
 		//Create a new player GameObject for that person
 		Bees [active_player] = (GameObject) Instantiate (Bee, Vector3.zero, Quaternion.identity);
         Bees[active_player].GetComponent<BeeScript>().PlayerNumber = active_player;
-        Bees[active_player].GetComponent<BeeScript>().TeamNumber = active_player%3;
+        Bees[active_player].GetComponent<BeeScript>().TeamNumber = active_player%2;
 
         Debug.Log (active_player);
 	}

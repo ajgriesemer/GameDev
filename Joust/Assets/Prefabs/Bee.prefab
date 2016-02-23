@@ -9,7 +9,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 455186}
   - 114: {fileID: 11495606}
-  - 114: {fileID: 11430250}
   m_Layer: 0
   m_Name: Bee
   m_TagString: Untagged
@@ -24,39 +23,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149724}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.027612882, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11430250
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 149724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6c6c938ef70aee42b03330b1d637965, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SpriteArray:
-  - {fileID: 21300048, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300050, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300052, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300054, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300056, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300058, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300060, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300062, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300064, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300066, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300068, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300070, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300072, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300074, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300076, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
-  - {fileID: 21300078, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
 --- !u!114 &11495606
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -74,9 +45,27 @@ MonoBehaviour:
   deadPrefab: {fileID: 186776, guid: a80aac012496e404c80d8d9b776cc4f8, type: 2}
   TeamNumber: 2
   PlayerNumber: 10
-  CyanAnimator: {fileID: 9100000, guid: c3d5d89406441ee4ba03a0d6fa6c9400, type: 2}
-  FieryAnimator: {fileID: 22100000, guid: 82b551a9223369a4aaec299b95c6920a, type: 2}
-  VultureAnimator: {fileID: 22100000, guid: 4f20670f8acc3ab43babeaa3a0a0d272, type: 2}
+  RiderArray:
+  - {fileID: 21300048, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300050, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300052, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300054, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300056, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300058, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300060, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300062, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300064, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300066, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300068, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300070, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300072, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300074, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300076, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  - {fileID: 21300078, guid: 46211a4a0b5418a4b8ecd40fbaa71f84, type: 3}
+  MountArray:
+  - {fileID: 9100000, guid: c3d5d89406441ee4ba03a0d6fa6c9400, type: 2}
+  - {fileID: 22100000, guid: 82b551a9223369a4aaec299b95c6920a, type: 2}
+  - {fileID: 22100000, guid: 4f20670f8acc3ab43babeaa3a0a0d272, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
