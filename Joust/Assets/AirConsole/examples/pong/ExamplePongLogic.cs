@@ -68,10 +68,10 @@ public class ExamplePongLogic : MonoBehaviour {
 		int active_player = AirConsole.instance.ConvertDeviceIdToPlayerNumber(device_id);
 		if (active_player != -1) {
 			if (active_player == 0) {
-                racketLeft.velocity = Vector3.up * (float)data ["move"];
+				this.racketLeft.velocity = Vector3.up * (float)data ["move"];
 			}
 			if (active_player == 1) {
-                racketRight.velocity = Vector3.up * (float)data ["move"];
+				this.racketRight.velocity = Vector3.up * (float)data ["move"];
 			}
 		}
     }
@@ -85,16 +85,16 @@ public class ExamplePongLogic : MonoBehaviour {
 	}
 
 	void ResetBall(bool move) {
-
-        // place ball at center
-        ball.position = Vector3.zero;
+		
+		// place ball at center
+		this.ball.position = Vector3.zero;
 		
 		// push the ball in a random direction
 		if (move) {
 			Vector3 startDir = new Vector3 (Random.Range (-1, 1f), Random.Range (-0.1f, 0.1f), 0);
-            ball.velocity = startDir.normalized * ballSpeed;
+			this.ball.velocity = startDir.normalized * this.ballSpeed;
 		} else {
-            ball.velocity = Vector3.zero;
+			this.ball.velocity = Vector3.zero;
 		}
 	}
 
@@ -106,13 +106,13 @@ public class ExamplePongLogic : MonoBehaviour {
     void FixedUpdate() {
 
         // check if ball reached one of the ends
-        if(ball.position.x < -9f){
+        if(this.ball.position.x < -9f){
             scoreRacketRight++;
             UpdateScoreUI();
             ResetBall(true);
         }
 
-        if (ball.position.x > 9f) {
+        if (this.ball.position.x > 9f) {
             scoreRacketLeft++;
             UpdateScoreUI();
             ResetBall(true);
