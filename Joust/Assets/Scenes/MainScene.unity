@@ -912,7 +912,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1435212046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -925,7 +925,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   browserStartMode: 0
-  controllerHtml: {fileID: 4900000, guid: 6b9cd27165a48074f825adfe9c7689c5, type: 3}
+  controllerHtml: {fileID: 4900000, guid: 6baea5a20d755084f9dd04e69b31f3ce, type: 3}
   autoScaleCanvas: 1
 --- !u!4 &1435212047
 Transform:

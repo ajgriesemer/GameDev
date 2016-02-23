@@ -613,7 +613,7 @@ namespace NDream.AirConsole {
                 DontDestroyOnLoad(this);
             } else {
                 if (this != _instance) {
-                    Destroy(gameObject);
+                    Destroy(this.gameObject);
                 }
             }
 
@@ -629,9 +629,9 @@ namespace NDream.AirConsole {
 
             // register all incoming events
             wsListener = new WebsocketListener();
-            wsListener.onReady += OnReady;
-            wsListener.onClose += OnClose;
-            wsListener.onMessage += OnMessage;
+            wsListener.onReady += this.OnReady;
+            wsListener.onClose += this.OnClose;
+            wsListener.onMessage += this.OnMessage;
             wsListener.onDeviceStateChange += OnDeviceStateChange;
 			wsListener.onConnect += OnConnect;
 			wsListener.onDisconnect += OnDisconnect;
@@ -653,7 +653,7 @@ namespace NDream.AirConsole {
             } else {
 
                 // call external javascript init function
-                Application.ExternalCall("onGameReady", autoScaleCanvas);
+                Application.ExternalCall("onGameReady", this.autoScaleCanvas);
             }
             
         }
@@ -695,8 +695,8 @@ namespace NDream.AirConsole {
 					_devices[deviceId] = null;
 				}
 				
-				if (onDeviceStateChange != null) {
-					eventQueue.Enqueue(() => onDeviceStateChange(deviceId, GetDevice(_device_id)));
+				if (this.onDeviceStateChange != null) {
+					eventQueue.Enqueue(() => this.onDeviceStateChange(deviceId, GetDevice(_device_id)));
 				}
 				
 				if (Settings.debug.info) {
@@ -722,8 +722,8 @@ namespace NDream.AirConsole {
 				
 				int deviceId = (int)msg["device_id"];
 				
-				if (onConnect != null) {
-					eventQueue.Enqueue(() => onConnect(deviceId));
+				if (this.onConnect != null) {
+					eventQueue.Enqueue(() => this.onConnect(deviceId));
 				}
 				
 				if (Settings.debug.info) {
@@ -750,8 +750,8 @@ namespace NDream.AirConsole {
 				
 				int deviceId = (int)msg["device_id"];
 				
-				if (onDisconnect != null) {
-					eventQueue.Enqueue(() => onDisconnect(deviceId));
+				if (this.onDisconnect != null) {
+					eventQueue.Enqueue(() => this.onDisconnect(deviceId));
 				}
 				
 				if (Settings.debug.info) {
@@ -777,8 +777,8 @@ namespace NDream.AirConsole {
 				
 				int deviceId = (int)msg["device_id"];
 				
-				if (onCustomDeviceStateChange != null) {
-					eventQueue.Enqueue(() => onCustomDeviceStateChange(deviceId, GetCustomDeviceState(deviceId)));
+				if (this.onCustomDeviceStateChange != null) {
+					eventQueue.Enqueue(() => this.onCustomDeviceStateChange(deviceId, GetCustomDeviceState(deviceId)));
 				}
 				
 				if (Settings.debug.info) {
@@ -796,8 +796,8 @@ namespace NDream.AirConsole {
 		
 		void OnMessage(JObject msg) {
 			
-			if (onMessage != null) {
-				eventQueue.Enqueue(() => onMessage((int)msg["from"], (JToken)msg["data"]));
+			if (this.onMessage != null) {
+				eventQueue.Enqueue(() => this.onMessage((int)msg["from"], (JToken)msg["data"]));
 			}
 		}
 		
@@ -823,8 +823,8 @@ namespace NDream.AirConsole {
 				_devices.Add(assign);
 			}
 			
-			if (onReady != null) {
-				eventQueue.Enqueue(() => onReady((string)msg["code"]));
+			if (this.onReady != null) {
+				eventQueue.Enqueue(() => this.onReady((string)msg["code"]));
 			}
 		}
 
@@ -838,8 +838,8 @@ namespace NDream.AirConsole {
 				
 				int deviceId = (int)msg["device_id"];
 				
-				if (onDeviceProfileChange != null) {
-					eventQueue.Enqueue(() => onDeviceProfileChange(deviceId));
+				if (this.onDeviceProfileChange != null) {
+					eventQueue.Enqueue(() => this.onDeviceProfileChange(deviceId));
 				}
 				
 				if (Settings.debug.info) {

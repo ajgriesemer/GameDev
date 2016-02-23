@@ -41,7 +41,7 @@ namespace NDream.AirConsole {
         }
 
         protected override void OnMessage(MessageEventArgs e) {
-            ProcessMessage(e.Data);
+            this.ProcessMessage(e.Data);
         }
 
         protected override void OnOpen() {
@@ -56,10 +56,10 @@ namespace NDream.AirConsole {
         }
 
         protected override void OnClose(CloseEventArgs e) {
-            isReady = false;
+            this.isReady = false;
 
-            if (onClose != null) {
-                onClose();
+            if (this.onClose != null) {
+                this.onClose();
             }
 
             if (Settings.debug.info) {
@@ -87,10 +87,10 @@ namespace NDream.AirConsole {
 
                 if ((string)msg["action"] == "onReady") {
 
-                    isReady = true;
+                    this.isReady = true;
 
-                    if (onReady != null) {
-                        onReady(msg);
+                    if (this.onReady != null) {
+                        this.onReady(msg);
                     }
 
                     if (Settings.debug.info) {
@@ -98,33 +98,33 @@ namespace NDream.AirConsole {
                     }
                 } else if ((string)msg["action"] == "onMessage") {
 
-                    if (onMessage != null) {
-                        onMessage(msg);
+                    if (this.onMessage != null) {
+                        this.onMessage(msg);
                     }
                 } else if ((string)msg["action"] == "onDeviceStateChange") {
 
-                    if (onDeviceStateChange != null) {
-                        onDeviceStateChange(msg);
+                    if (this.onDeviceStateChange != null) {
+                        this.onDeviceStateChange(msg);
                     }
 				} else if ((string)msg["action"] == "onConnect") {
 					
-					if (onConnect != null) {
-                        onConnect(msg);
+					if (this.onConnect != null) {
+						this.onConnect(msg);
 					}
 				} else if ((string)msg["action"] == "onDisconnect") {
 					
-					if (onDisconnect != null) {
-                        onDisconnect(msg);
+					if (this.onDisconnect != null) {
+						this.onDisconnect(msg);
 					}
 				} else if ((string)msg["action"] == "onCustomDeviceStateChange") {
 
-					if (onCustomDeviceStateChange != null) {
-                        onCustomDeviceStateChange(msg);
+					if (this.onCustomDeviceStateChange != null) {
+						this.onCustomDeviceStateChange(msg);
 					}
 				} else if ((string)msg["action"] == "onDeviceProfileChange") {
 					
-					if (onDeviceProfileChange != null) {
-                        onDeviceProfileChange(msg);
+					if (this.onDeviceProfileChange != null) {
+						this.onDeviceProfileChange(msg);
 					}
 				}
 
