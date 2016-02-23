@@ -10,55 +10,29 @@
                          navigator.msVibrate);
 
     var airconsole;
+    var isPlayerReady;
+
     /**
      * Sets up the communication to the screen.
      */
     function init() {
-      airconsole = new AirConsole({"orientation": "portrait"});
+      isPlayerReady = false;
+
+      airconsole = new AirConsole({ "orientation": "landscape" });
       airconsole.onMessage = function(from, data) {
         if (from == AirConsole.SCREEN && data.vibrate) {
           navigator.vibrate(data.vibrate);
           console.log("Vibrating: " + data.vibrate);
         }
       }
-      airconsole.onActivePlayersChange = function(player_number) {
-        updateText(player_number);
-      }
-      airconsole.onReady = function() {
-        updateText();
-      }
     }
+	
+	function togglePlayerReady() {
+	    isPlayerReady = !isPlayerReady;
+	    var playerReadyButton = document.getElementById("ready_button");
+	    playerReadyButton.innerHTML = isPlayerReady ? "Ready" : "Not Ready";
 
-	function updateText(player_number) {
-	  var colorBlock = document.getElementById("color");
-      if (player_number == undefined) {
-        colorBlock.style.backgroundColor = "black"
-      } else if (player_number == 0) {
-        colorBlock.style.backgroundColor = "blue"
-      } else if (player_number == 1) {
-        colorBlock.style.backgroundColor = "red"
-      } else if (player_number == 2) {
-        colorBlock.style.backgroundColor = "green"
-      } else if (player_number == 3) {
-        colorBlock.style.backgroundColor = "yellow"
-      };
-	}
-
-    /**
-     * Tells the screen to move the paddle of this player.
-     * @param amount
-     */
-    function left(amount) {
-      airconsole.message(AirConsole.SCREEN, {left: amount})
-    }
-    function right(amount) {
-      airconsole.message(AirConsole.SCREEN, {right: amount})
-    }
-    function up(amount) {
-      airconsole.message(AirConsole.SCREEN, {up: amount})
-    }
-    function down(amount) {
-      airconsole.message(AirConsole.SCREEN, {down: amount})
+	    airconsole.setCustomDeviceStateProperty('isPlayerReady', isPlayerReady);
     }
     </script>
     <style type="text/css">
@@ -81,51 +55,13 @@
             width: 98%;
             background-color: #222;
             position: relative;
-        }
-
-        #left-button{
-			height: 20%;
-        }
-
-        #right-button{
-			height: 20%;
-        }
-
-        #up-button{
-
-        }
-
-        .button_label {
-            position: absolute;
-            left: 0px;
-            width: 100%;
-            top: 50%;
-            margin-top: -6px;
-        }
-
-        #player_id {
-            position: absolute;
-            top: 50%;
-            left: 0%;
-            width: 100%;
-            margin-top: -8px;
-            color: #777;
+            color: #fff;
         }
     </style>
 </head>
 <body onload="init()">
     <div style="height: 1%"></div>
-    <div id=left-button class=button ontouchstart="left(true)" ontouchend="left(false)">
-        <div class="button_label">LEFT</div>
-    </div>
     <div style="height: 5%"></div>
-    <div id=right-button class=button ontouchstart="right(true)" ontouchend="right(false)" >
-        <div class="button_label">RIGHT</div>
-    </div>
-    <div id=color style="height: 8%"></div>
-    <div class=button ontouchstart="up(true)" ontouchend="up(false)">
-        <div class="button_label">UP</div>
-    </div>
-    <div id="player_id"></div>
+    <button id="ready_button" class="button" ontouchstart="togglePlayerReady()">Not Ready</button>
 </body>
 </html>
