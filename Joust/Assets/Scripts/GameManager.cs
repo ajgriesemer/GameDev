@@ -9,6 +9,19 @@ using Newtonsoft.Json.Linq;
 
 public class GameManager : MonoBehaviour
 {
+    // class for holding team info
+    public class Team
+    {
+        public string Color { get; private set; }
+        public List<HumanPlayer> Players { get; private set; }
+
+        public Team(string color)
+        {
+            this.Color = color;
+            this.Players = new List<HumanPlayer>();
+        }
+    }
+    
     // class for holding player info
     public class HumanPlayer
     {
@@ -25,7 +38,10 @@ public class GameManager : MonoBehaviour
     // singleton instance of the GameManager
     public static GameManager instance = null;
 
+    private List<Team> Teams = new List<Team>();
     private List<HumanPlayer> Players = new List<HumanPlayer>();
+
+    public int numTeams = 2;
 
     public void StartGame()
     {
@@ -41,6 +57,11 @@ public class GameManager : MonoBehaviour
         else if (instance != null)
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
+
+        // create teams
+        this.Teams = new List<Team>();
+        this.Teams.Add(new Team("Blue"));
+        this.Teams.Add(new Team("Green"));
 
         // register airconsole events
         AirConsole.instance.onConnect += AirConsole_onConnect;
@@ -58,9 +79,23 @@ public class GameManager : MonoBehaviour
         numReadyPlayersText.text = "# Ready Players: " + this.Players.Where(p => p.IsReady).Count();
     }
 
+    private void AssignToTeam(HumanPlayer player)
+    {
+        var leastTeamMembers = this.Teams.Select(t => t.Players.Count).Min();
+        var smallestTeam = this.Teams.First(t => t.Players.Count == leastTeamMembers);
+
+        smallestTeam.Players.Add(player);
+
+        Debug.Log(string.Format("Sending message to device id {0}. Message: {1}", player.DeviceId, smallestTeam.Color));
+        AirConsole.instance.Message(player.DeviceId, smallestTeam.Color);
+    }
+
     private void AirConsole_onConnect(int device_id)
     {
-        this.Players.Add(new HumanPlayer(device_id));
+        var player = new HumanPlayer(device_id);
+
+        this.Players.Add(player);
+        this.AssignToTeam(player);
 
         this.UpdatePlayerCount();
     }
@@ -70,6 +105,12 @@ public class GameManager : MonoBehaviour
         var player = this.Players.FirstOrDefault(p => p.DeviceId == device_id);
         if (player != null)
         {
+            var playerTeam = this.Teams.FirstOrDefault(t => t.Players.Contains(player));
+            if (playerTeam != null)
+            {
+                playerTeam.Players.Remove(player);
+            }
+
             this.Players.Remove(player);
         }
 

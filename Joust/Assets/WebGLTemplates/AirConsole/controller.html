@@ -11,19 +11,18 @@
 
     var airconsole;
     var isPlayerReady;
+    var playerTeam;
 
     /**
      * Sets up the communication to the screen.
      */
     function init() {
       isPlayerReady = false;
-
       airconsole = new AirConsole({ "orientation": "landscape" });
       airconsole.onMessage = function(from, data) {
-        if (from == AirConsole.SCREEN && data.vibrate) {
-          navigator.vibrate(data.vibrate);
-          console.log("Vibrating: " + data.vibrate);
-        }
+          // assuming that only team color can come down in the message right now
+          // obviously this will change
+          setTeam(data);
       }
     }
 	
@@ -33,7 +32,14 @@
 	    playerReadyButton.innerHTML = isPlayerReady ? "Ready" : "Not Ready";
 
 	    airconsole.setCustomDeviceStateProperty('isPlayerReady', isPlayerReady);
-    }
+	}
+
+	function setTeam(team) {
+	    playerTeam = team;
+
+	    var teamText = document.getElementById("team_name");
+	    teamText.innerHTML = playerTeam;
+	}
     </script>
     <style type="text/css">
         @font-face {
@@ -63,5 +69,6 @@
     <div style="height: 1%"></div>
     <div style="height: 5%"></div>
     <button id="ready_button" class="button" ontouchstart="togglePlayerReady()" onmousedown="togglePlayerReady()">Not Ready</button>
+    <div id="team_name">Unknown</div>
 </body>
 </html>
