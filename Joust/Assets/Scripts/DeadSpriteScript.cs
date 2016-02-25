@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DeadSpriteScript : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+public class DeadSpriteScript : MonoBehaviour {
+    
+    // Use this for initialization
+    void Start () {
 	
 	}
 
@@ -16,8 +17,13 @@ public class DeadSpriteScript : MonoBehaviour {
     {
     }
 
+    void StandingAnimation(bool standing)
+    {
+    }
+
     // Update is called once per frame
     void Update () {
+        /*
         if(transform.position.x > 0)
         {
             GetComponent<Rigidbody2D>().velocity = Vector2.right;
@@ -27,6 +33,6 @@ public class DeadSpriteScript : MonoBehaviour {
         {
             GetComponent<Rigidbody2D>().velocity = Vector2.left;
             GetComponent<SpriteRenderer>().flipX = true;
-        }
+        }*/
 	}
 }
