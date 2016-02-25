@@ -10,36 +10,56 @@
                          navigator.msVibrate);
 
     var airconsole;
-    var isPlayerReady;
-    var playerTeam;
-
     /**
      * Sets up the communication to the screen.
      */
     function init() {
-      isPlayerReady = false;
-      airconsole = new AirConsole({ "orientation": "landscape" });
+      airconsole = new AirConsole({"orientation": "portrait"});
       airconsole.onMessage = function(from, data) {
-          // assuming that only team color can come down in the message right now
-          // obviously this will change
-          setTeam(data);
+        if (from == AirConsole.SCREEN && data.vibrate) {
+          navigator.vibrate(data.vibrate);
+          console.log("Vibrating: " + data.vibrate);
+        }
+      }
+      airconsole.onActivePlayersChange = function(player_number) {
+        updateText(player_number);
+      }
+      airconsole.onReady = function() {
+        updateText();
       }
     }
-	
-	function togglePlayerReady() {
-	    isPlayerReady = !isPlayerReady;
-	    var playerReadyButton = document.getElementById("ready_button");
-	    playerReadyButton.innerHTML = isPlayerReady ? "Ready" : "Not Ready";
 
-	    airconsole.setCustomDeviceStateProperty('isPlayerReady', isPlayerReady);
+	function updateText(player_number) {
+	  var colorBlock = document.getElementById("color");
+      if (player_number == undefined) {
+        colorBlock.style.backgroundColor = "black"
+      } else if (player_number == 0) {
+        colorBlock.style.backgroundColor = "blue"
+      } else if (player_number == 1) {
+        colorBlock.style.backgroundColor = "red"
+      } else if (player_number == 2) {
+        colorBlock.style.backgroundColor = "green"
+      } else if (player_number == 3) {
+        colorBlock.style.backgroundColor = "yellow"
+      };
 	}
 
-	function setTeam(team) {
-	    playerTeam = team;
-
-	    var teamText = document.getElementById("team_name");
-	    teamText.innerHTML = playerTeam;
-	}
+    /**
+     * Tells the screen to move the paddle of this player.
+     * @param amount
+     */
+    function left(amount) {
+      airconsole.message(AirConsole.SCREEN, {left: amount})
+    }
+    function right(amount) {
+      airconsole.message(AirConsole.SCREEN, {right: amount})
+    }
+    function up(amount) {
+      airconsole.message(AirConsole.SCREEN, {up: amount})
+    }
+    function down(amount) {
+      airconsole.message(AirConsole.SCREEN, {down: amount})
+    }
     </script>
     <style type="text/css">
         @font-face {
@@ -61,14 +81,51 @@
             width: 98%;
             background-color: #222;
             position: relative;
-            color: #fff;
+        }
+
+        #left-button{
+			height: 20%;
+        }
+
+        #right-button{
+			height: 20%;
+        }
+
+        #up-button{
+
+        }
+
+        .button_label {
+            position: absolute;
+            left: 0px;
+            width: 100%;
+            top: 50%;
+            margin-top: -6px;
+        }
+
+        #player_id {
+            position: absolute;
+            top: 50%;
+            left: 0%;
+            width: 100%;
+            margin-top: -8px;
+            color: #777;
         }
     </style>
 </head>
 <body onload="init()">
     <div style="height: 1%"></div>
+    <div id=left-button class=button ontouchstart="left(true)" ontouchend="left(false)">
+        <div class="button_label">LEFT</div>
+    </div>
     <div style="height: 5%"></div>
-    <button id="ready_button" class="button" ontouchstart="togglePlayerReady()" onmousedown="togglePlayerReady()">Not Ready</button>
-    <div id="team_name">Unknown</div>
+    <div id=right-button class=button ontouchstart="right(true)" ontouchend="right(false)" >
+        <div class="button_label">RIGHT</div>
+    </div>
+    <div id=color style="height: 8%"></div>
+    <div class=button ontouchstart="up(true)" ontouchend="up(false)">
+        <div class="button_label">UP</div>
+    </div>
+    <div id="player_id"></div>
 </body>
 </html>

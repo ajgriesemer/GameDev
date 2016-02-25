@@ -37,6 +37,9 @@ public class BeeScript : MonoBehaviour
         Destroy(mainSprite);
         mainSprite = Instantiate(deadPrefab, spritePosition, Quaternion.identity) as GameObject;
 
+        //Rename the object to prevent multiple (clone) labels from being added
+        mainSprite.name = deadPrefab.name;
+
         if (secondarySprite != null)
         {
             Destroy(secondarySprite);
