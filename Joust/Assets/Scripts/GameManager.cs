@@ -38,10 +38,13 @@ public class GameManager : MonoBehaviour
     // singleton instance of the GameManager
     public static GameManager instance = null;
 
+    private bool gameStarting = false;
     private List<Team> Teams = new List<Team>();
     private List<HumanPlayer> Players = new List<HumanPlayer>();
 
     public int numTeams = 2;
+    public int countdownTime = 3;
+    public Text CountdownText;
 
     public void StartGame()
     {
@@ -65,9 +68,14 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         // create teams
-        this.Teams = new List<Team>();
-        this.Teams.Add(new Team("Blue"));
-        this.Teams.Add(new Team("Green"));
+        this.Teams = new List<Team>
+        {
+            new Team("Blue"),
+            new Team("Green")
+        };
+
+        // set the menu text
+        this.CountdownText.text = "";
 
         // register airconsole events
         AirConsole.instance.onConnect += AirConsole_onConnect;
@@ -78,11 +86,33 @@ public class GameManager : MonoBehaviour
 
     private void UpdatePlayerCount()
     {
+        var numPlayers = this.Players.Count;
         var numPlayersText = GameObject.Find("NumPlayersText").GetComponent<Text>();
-        numPlayersText.text = "# Players: " + this.Players.Count;
+        numPlayersText.text = "# Players: " + numPlayers;
 
-        var numReadyPlayersText = GameObject.Find("NumReadyPlayersText").GetComponent<Text>();
-        numReadyPlayersText.text = "# Ready Players: " + this.Players.Where(p => p.IsReady).Count();
+        var numReady = this.Players.Where(p => p.IsReady).Count();
+        var numReadyText = GameObject.Find("NumReadyText").GetComponent<Text>();
+        numReadyText.text = "# Ready Players: " + numReady;
+
+        // if all the players are ready, begin counting down to the start of the game
+        if (!gameStarting && numPlayers == numReady)
+        {
+            this.gameStarting = true;
+            StartCoroutine(CountdownToStart(this.countdownTime));
+        }
+    }
+
+    private IEnumerator CountdownToStart(int seconds)
+    {
+        for (int i = seconds; i > 0; i--)
+        {
+            this.CountdownText.text = "Starting in " + i;
+
+            yield return new WaitForSeconds(1);
+        }
+
+        this.CountdownText.text = "GO!";
+        this.StartGame();
     }
 
     private void AssignToTeam(HumanPlayer player)
@@ -97,7 +127,6 @@ public class GameManager : MonoBehaviour
             type = "team",
             data = smallestTeam.Color
         };
-        Debug.Log(string.Format("Sending message to device id {0}. Message: {1}", player.DeviceId, message));
         AirConsole.instance.Message(player.DeviceId, message);
     }
 
