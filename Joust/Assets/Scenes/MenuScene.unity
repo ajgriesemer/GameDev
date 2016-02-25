@@ -113,11 +113,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1709870901}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_AnchorMin: {x: 0.5, y: 0.18}
   m_AnchorMax: {x: 0.5, y: 0.18}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 316}
+  m_SizeDelta: {x: 160, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &59878790
 MonoBehaviour:
@@ -374,7 +374,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1709870901}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -527,7 +527,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &981992567
 RectTransform:
   m_ObjectHideFlags: 0
@@ -540,7 +540,7 @@ RectTransform:
   m_Children:
   - {fileID: 142629582}
   m_Father: {fileID: 1709870901}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_AnchorMin: {x: 0.5, y: 0.1}
   m_AnchorMax: {x: 0.5, y: 0.1}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -648,7 +648,7 @@ GameObject:
   - 222: {fileID: 1260573462}
   - 114: {fileID: 1260573461}
   m_Layer: 5
-  m_Name: NumReadyPlayersText
+  m_Name: NumReadyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -665,7 +665,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1709870901}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_AnchorMin: {x: 0.5, y: 0.45}
   m_AnchorMax: {x: 0.5, y: 0.45}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -885,10 +885,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 328588056}
-  - {fileID: 981992567}
   - {fileID: 357695271}
   - {fileID: 1260573460}
   - {fileID: 59878789}
+  - {fileID: 981992567}
   m_Father: {fileID: 714096581}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
@@ -968,6 +968,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 11411058, guid: 75373e779dd333744a01227a93f64272, type: 2}
+      propertyPath: CountdownText
+      value: 
+      objectReference: {fileID: 59878790}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 75373e779dd333744a01227a93f64272, type: 2}
   m_IsPrefabParent: 0
