@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using Newtonsoft.Json.Linq;
 
 public class GameManager : MonoBehaviour
-{
+{   
     // class for holding team info
     public class Team
     {
@@ -45,6 +45,12 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        var message = new
+        {
+            type = "start",
+        };
+        AirConsole.instance.Broadcast(message);
+
         SceneManager.LoadScene("MainScene");
     }
 
@@ -86,8 +92,13 @@ public class GameManager : MonoBehaviour
 
         smallestTeam.Players.Add(player);
 
-        Debug.Log(string.Format("Sending message to device id {0}. Message: {1}", player.DeviceId, smallestTeam.Color));
-        AirConsole.instance.Message(player.DeviceId, smallestTeam.Color);
+        var message = new
+        {
+            type = "team",
+            data = smallestTeam.Color
+        };
+        Debug.Log(string.Format("Sending message to device id {0}. Message: {1}", player.DeviceId, message));
+        AirConsole.instance.Message(player.DeviceId, message);
     }
 
     private void AirConsole_onConnect(int device_id)

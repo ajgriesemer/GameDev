@@ -19,10 +19,17 @@
     function init() {
       isPlayerReady = false;
       airconsole = new AirConsole({ "orientation": "landscape" });
-      airconsole.onMessage = function(from, data) {
-          // assuming that only team color can come down in the message right now
-          // obviously this will change
-          setTeam(data);
+      airconsole.onMessage = function(from, message) {
+          if (message.type == "team")
+          {
+              setTeam(message.data);
+          }
+
+          if (message.type == "start")
+          {
+              toggleVisibility("menu_content", false);
+              toggleVisibility("game_content", true);
+          }
       }
     }
 	
@@ -40,6 +47,15 @@
 	    var teamText = document.getElementById("team_name");
 	    teamText.innerHTML = playerTeam;
 	}
+
+	function toggleVisibility(elementName, visible) {
+	    var element = document.getElementById(elementName);
+	    if (visible)
+	        element.classList.remove('hidden');
+	    else
+	        element.classList.add('hidden');
+	}
+
     </script>
     <style type="text/css">
         @font-face {
@@ -63,12 +79,23 @@
             position: relative;
             color: #fff;
         }
+
+        .hidden {
+            display: none
+        }
     </style>
 </head>
 <body onload="init()">
-    <div style="height: 1%"></div>
-    <div style="height: 5%"></div>
-    <button id="ready_button" class="button" ontouchstart="togglePlayerReady()" onmousedown="togglePlayerReady()">Not Ready</button>
-    <div id="team_name">Unknown</div>
+    <div id="menu_content">
+        <div style="height: 1%"></div>
+        <div style="height: 5%"></div>
+        <button id="ready_button" class="button" ontouchstart="togglePlayerReady()" onmousedown="togglePlayerReady()">Not Ready</button>
+        <div id="team_name">Unknown</div>
+    </div>
+    <div id="game_content" class="hidden">
+        <div style="height: 1%"></div>
+        <div style="height: 5%"></div>
+        <div>Controller goes here!</div>
+    </div>
 </body>
 </html>
