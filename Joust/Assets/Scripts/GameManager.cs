@@ -8,7 +8,29 @@ using UnityEngine.UI;
 using Newtonsoft.Json.Linq;
 
 public class GameManager : MonoBehaviour
-{   
+{
+    // message classes for standardizing message format that is broadcast to airconsole controllers
+    public class Message<T> : Message
+    {
+        public T Data { get; private set; }
+
+        public Message(string type, T data)
+            : base(type)
+        {
+            this.Data = data;
+        }
+    }
+
+    public class Message
+    {
+        public string Type { get; private set; }
+
+        public Message(string type)
+        {
+            this.Type = type;
+        }
+    }
+    
     // class for holding team info
     public class Team
     {
@@ -38,6 +60,12 @@ public class GameManager : MonoBehaviour
     // singleton instance of the GameManager
     public static GameManager instance = null;
 
+    // message types used for communicating with airconsole
+    private const string TEAM_MESSAGE = "team";
+    private const string LOCK_MESSAGE = "lock";
+    private const string COUNTDOWN_MESSAGE = "countdown";
+    private const string START_MESSAGE = "start";
+
     private bool gameStarting = false;
     private List<Team> Teams = new List<Team>();
     private List<HumanPlayer> Players = new List<HumanPlayer>();
@@ -48,12 +76,10 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        var message = new
-        {
-            type = "start",
-        };
-        AirConsole.instance.Broadcast(message);
+        // set the controllers to game mode by signaling the game has started
+        AirConsole.instance.Broadcast(new Message(START_MESSAGE));
 
+        // load the main scene
         SceneManager.LoadScene("MainScene");
     }
 
@@ -86,27 +112,36 @@ public class GameManager : MonoBehaviour
 
     private void UpdatePlayerCount()
     {
-        var numPlayers = this.Players.Count;
-        var numPlayersText = GameObject.Find("NumPlayersText").GetComponent<Text>();
-        numPlayersText.text = "# Players: " + numPlayers;
-
-        var numReady = this.Players.Where(p => p.IsReady).Count();
-        var numReadyText = GameObject.Find("NumReadyText").GetComponent<Text>();
-        numReadyText.text = "# Ready Players: " + numReady;
-
-        // if all the players are ready, begin counting down to the start of the game
-        if (!gameStarting && numPlayers == numReady)
+        if (!gameStarting)
         {
-            this.gameStarting = true;
-            StartCoroutine(CountdownToStart(this.countdownTime));
+            var numPlayers = this.Players.Count;
+            var numPlayersText = GameObject.Find("NumPlayersText").GetComponent<Text>();
+            numPlayersText.text = "# Players: " + numPlayers;
+
+            var numReady = this.Players.Where(p => p.IsReady).Count();
+            var numReadyText = GameObject.Find("NumReadyText").GetComponent<Text>();
+            numReadyText.text = "# Ready Players: " + numReady;
+
+            // if all the players are ready, begin counting down to the start of the game
+            if (numPlayers == numReady)
+            {
+                this.gameStarting = true;
+                StartCoroutine(CountdownToStart(this.countdownTime));
+            }
         }
     }
 
     private IEnumerator CountdownToStart(int seconds)
     {
+        // lock the controllers to keep people from toggling their ready state
+        AirConsole.instance.Broadcast(new Message(LOCK_MESSAGE));
+
+        // countdown to 0, pausing every second
         for (int i = seconds; i > 0; i--)
         {
+            // update the menu text and controllers with the time remaining until start
             this.CountdownText.text = "Starting in " + i;
+            AirConsole.instance.Broadcast(new Message<int>(COUNTDOWN_MESSAGE, i));
 
             yield return new WaitForSeconds(1);
         }
@@ -121,13 +156,7 @@ public class GameManager : MonoBehaviour
         var smallestTeam = this.Teams.First(t => t.Players.Count == leastTeamMembers);
 
         smallestTeam.Players.Add(player);
-
-        var message = new
-        {
-            type = "team",
-            data = smallestTeam.Color
-        };
-        AirConsole.instance.Message(player.DeviceId, message);
+        AirConsole.instance.Message(player.DeviceId, new Message<string>(TEAM_MESSAGE, smallestTeam.Color));
     }
 
     private void AirConsole_onConnect(int device_id)
@@ -177,8 +206,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void AirConsole_onMessage(int from, Newtonsoft.Json.Linq.JToken data)
+    private void AirConsole_onMessage(int from, JToken data)
     {
-        Debug.Log("Message received");
+        Debug.Log(string.Format("Message received: {0}", data));
     }
 }

@@ -20,15 +20,24 @@
       isPlayerReady = false;
       airconsole = new AirConsole({ "orientation": "landscape" });
       airconsole.onMessage = function(from, message) {
-          if (message.type == "team")
+          if (message.Type == "team")
           {
-              setTeam(message.data);
+              setTeam(message.Data);
           }
-
-          if (message.type == "start")
+          if (message.Type == "lock")
           {
-              toggleVisibility("menu_content", false);
-              toggleVisibility("game_content", true);
+              toggleVisibility("menu_controls", false);
+              toggleVisibility("countdown_controls", true);
+              toggleVisibility("game_controls", false);
+          }
+          if (message.Type == "countdown") {
+              setCountdownTime(message.Data);
+          }
+          if (message.Type == "start")
+          {
+              toggleVisibility("menu_controls", false);
+              toggleVisibility("countdown_controls", false);
+              toggleVisibility("game_controls", true);
           }
       }
     }
@@ -46,6 +55,11 @@
 
 	    var teamText = document.getElementById("team_name");
 	    teamText.innerHTML = playerTeam;
+	}
+
+	function setCountdownTime(time) {
+	    var countdown = document.getElementById('countdown');
+	    countdown.innerHTML = time;
 	}
 
 	function toggleVisibility(elementName, visible) {
@@ -80,21 +94,30 @@
             color: #fff;
         }
 
+        .inline-section > div {
+            display: inline;
+        }
+
         .hidden {
             display: none
         }
     </style>
 </head>
 <body onload="init()">
-    <div id="menu_content">
-        <div style="height: 1%"></div>
+    <div id="menu_controls">
         <div style="height: 5%"></div>
         <button id="ready_button" class="button" ontouchstart="togglePlayerReady()" onmousedown="togglePlayerReady()">Not Ready</button>
         <div id="team_name">Unknown</div>
     </div>
-    <div id="game_content" class="hidden">
-        <div style="height: 1%"></div>
-        <div style="height: 5%"></div>
+    <div id="countdown_controls" class="hidden">
+        <div style="height: 25%"></div>
+        <div class="inline-section">
+            <div>Game starts in </div>
+            <div id="countdown"></div>
+        </div>
+    </div>
+    <div id="game_controls" class="hidden">
+        <div style="height: 25%"></div>
         <div>Controller goes here!</div>
     </div>
 </body>
