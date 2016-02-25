@@ -1,22 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BeeScript : MonoBehaviour {
-	public GameObject mainSprite;
-	public GameObject secondarySprite;
+public class BeeScript : MonoBehaviour
+{
+    public GameObject mainSprite;
+    public GameObject secondarySprite;
     public GameObject warriorPrefab;
     public GameObject deadPrefab;
     public int TeamNumber;
     public int PlayerNumber;
     public Sprite[] RiderArray;
     public RuntimeAnimatorController[] MountArray;
+    private bool lastStandingState = false;
 
     // Use this for initialization
     void Start()
     {
         //When the Bee object is first created instantiate the mainSprite in the center of the screen
         mainSprite = (GameObject)Instantiate(warriorPrefab, new Vector3(0, 1), Quaternion.identity);
+
+        mainSprite.name = warriorPrefab.name;
         mainSprite.GetComponent<MountScript>().OnBeeDeath += KillBee;
+        mainSprite.GetComponent<MountScript>().OnStandingEnter += StartStanding;
+
         mainSprite.GetComponent<Animator>().runtimeAnimatorController = MountArray[TeamNumber];
         mainSprite.transform.Find("Rider").GetComponent<SpriteRenderer>().sprite = RiderArray[PlayerNumber];
 
@@ -24,13 +30,27 @@ public class BeeScript : MonoBehaviour {
     private void KillBee()
     {
         Vector3 spritePosition = mainSprite.transform.position;
+
+        mainSprite.GetComponent<MountScript>().OnBeeDeath -= KillBee;
+        mainSprite.GetComponent<MountScript>().OnStandingEnter -= StartStanding;
+
         Destroy(mainSprite);
         mainSprite = Instantiate(deadPrefab, spritePosition, Quaternion.identity) as GameObject;
 
-        if(secondarySprite != null)
+        if (secondarySprite != null)
         {
             Destroy(secondarySprite);
         }
+    }
+
+    private void StartStanding(bool standing)
+    {
+        mainSprite.SendMessage("StandingAnimation", standing);
+        if (secondarySprite != null)
+        {
+            secondarySprite.SendMessage("StandingAnimation", standing);
+        }
+        lastStandingState = standing;
     }
 
     public void MoveBee(float? horizontal, bool? up)
@@ -38,7 +58,7 @@ public class BeeScript : MonoBehaviour {
         if (horizontal != null)
         {
             mainSprite.SendMessage("MoveHorizontal", horizontal.Value);
-            if(secondarySprite != null)
+            if (secondarySprite != null)
             {
                 secondarySprite.SendMessage("MoveHorizontal", horizontal.Value);
             }
@@ -54,22 +74,29 @@ public class BeeScript : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         float halfScreenWidth = Camera.main.orthographicSize * (float)Screen.width / (float)Screen.height;
-        float halfSpriteWidth = mainSprite.GetComponent<SpriteRenderer>().bounds.size.x/(float)2.0;
+        float halfSpriteWidth = mainSprite.GetComponent<SpriteRenderer>().bounds.size.x / (float)2.0;
 
         if (mainSprite.transform.position.x > (halfScreenWidth - halfSpriteWidth) || mainSprite.transform.position.x < -(halfScreenWidth - halfSpriteWidth))
         {
             if (secondarySprite == null)
             {
-                if (mainSprite.transform.position.x>0)
+                if (mainSprite.transform.position.x > 0)
                 {
                     secondarySprite = Instantiate(mainSprite, new Vector3(mainSprite.transform.position.x - 2 * halfScreenWidth, mainSprite.transform.position.y, 0), Quaternion.identity) as GameObject;
+                    //Rename the object to prevent multiple (clone) labels from being added
+                    secondarySprite.name = mainSprite.name;
+                    secondarySprite.SendMessage("StandingAnimation", lastStandingState);
 
                 }
                 else
                 {
                     secondarySprite = Instantiate(mainSprite, new Vector3(mainSprite.transform.position.x + 2 * halfScreenWidth, mainSprite.transform.position.y, 0), Quaternion.identity) as GameObject;
+                    //Rename the object to prevent multiple (clone) labels from being added
+                    secondarySprite.name = mainSprite.name;
+                    secondarySprite.SendMessage("StandingAnimation", lastStandingState);
                 }
                 secondarySprite.GetComponent<Rigidbody2D>().isKinematic = true;
             }
@@ -79,26 +106,26 @@ public class BeeScript : MonoBehaviour {
                 {
                     secondarySprite.gameObject.GetComponent<Rigidbody2D>().velocity = mainSprite.gameObject.GetComponent<Rigidbody2D>().velocity;
                     secondarySprite.GetComponent<Rigidbody2D>().isKinematic = false;
+                    mainSprite.GetComponent<MountScript>().OnBeeDeath -= KillBee;
+                    mainSprite.GetComponent<MountScript>().OnStandingEnter -= StartStanding;
+
                     Destroy(mainSprite);
                     mainSprite = secondarySprite;
+
+                    mainSprite.GetComponent<MountScript>().OnBeeDeath += KillBee;
+                    mainSprite.GetComponent<MountScript>().OnStandingEnter += StartStanding;
+
                     secondarySprite = null;
                 }
                 else
                 {
-                    if (mainSprite.transform.position.x > 0)
-                    {
-                        secondarySprite.gameObject.transform.position = new Vector3(mainSprite.gameObject.transform.position.x - 2 * halfScreenWidth, mainSprite.gameObject.transform.position.y, 0);
-                    }
-                    else
-                    {
-                        secondarySprite.gameObject.transform.position = new Vector3(mainSprite.gameObject.transform.position.x + 2 * halfScreenWidth, mainSprite.gameObject.transform.position.y, 0);
-                    }
+                    secondarySprite.gameObject.GetComponent<Rigidbody2D>().velocity = mainSprite.GetComponent<Rigidbody2D>().velocity;
                 }
             }
         }
         else
         {
-            if(secondarySprite != null)
+            if (secondarySprite != null)
             {
                 Destroy(secondarySprite);
             }

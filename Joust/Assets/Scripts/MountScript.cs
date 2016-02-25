@@ -2,19 +2,24 @@
 using System.Collections;
 
 public delegate void PlayerDeath();
+public delegate void StandingEnter(bool standing);
 
-public class MountScript : MonoBehaviour {
+public class MountScript : MonoBehaviour
+{
     public bool isSecondary = false;
     private float horizontalInput = 0;
     private bool upInput = false;
     public event PlayerDeath OnBeeDeath;
+    public event StandingEnter OnStandingEnter;
 
-	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Use this for initialization
+    void Start()
+    {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         if (gameObject.GetComponent<Rigidbody2D>().velocity.x > 0)
         {
             gameObject.GetComponent<SpriteRenderer>().flipX = false;
@@ -25,7 +30,6 @@ public class MountScript : MonoBehaviour {
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
             transform.Find("Rider").GetComponent<SpriteRenderer>().flipX = true;
         }
-
     }
 
     void Jump(bool up)
@@ -36,6 +40,11 @@ public class MountScript : MonoBehaviour {
     void MoveHorizontal(float input)
     {
         horizontalInput = input;
+    }
+
+    void StandingAnimation(bool standing)
+    {
+        gameObject.GetComponent<Animator>().SetBool("OnPlatform", standing);
     }
 
     // FixedUpdate is called about once per frame at a regular interval
@@ -52,23 +61,23 @@ public class MountScript : MonoBehaviour {
 
         if (isSecondary == false)
         {
-            if ((gameObject.GetComponent<Rigidbody2D>().velocity.x < 3 && gameObject.GetComponent<Rigidbody2D>().velocity.x > -3) ||
+            if ((gameObject.GetComponent<Rigidbody2D>().velocity.x < 2 && gameObject.GetComponent<Rigidbody2D>().velocity.x > -2) ||
                 (horizontalInput > 0 && gameObject.GetComponent<Rigidbody2D>().velocity.x < 0) ||
                 (horizontalInput < 0 && gameObject.GetComponent<Rigidbody2D>().velocity.x > 0)
                 )
             {
-                gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.right * horizontalInput * 10);
+                gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.right * horizontalInput * 5);
             }
 
             if (upInput == true)
             {
-                gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 20);
+                gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 10);
                 upInput = false;
             }
         }
 
-       }
-    void OnCollisionEnter2D (Collision2D coll)
+    }
+    void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.gameObject.tag == "Warrior")
         {
@@ -81,20 +90,17 @@ public class MountScript : MonoBehaviour {
                 }
             }
         }
-        if (coll.gameObject.tag == "Terrain")
+        if (coll.gameObject.tag == "Terrain" && coll.contacts[0].normal == Vector2.up && isSecondary == false)
         {
-            if (coll.contacts[0].normal == Vector2.up)
-            {
-                gameObject.GetComponent<Animator>().SetBool("OnPlatform", true);
-            }
+            OnStandingEnter(true);
         }
     }
 
-    void OnCollisionExit2D (Collision2D coll)
+    void OnCollisionExit2D(Collision2D coll)
     {
-        if (coll.gameObject.tag == "Terrain")
+        if (coll.gameObject.tag == "Terrain" && coll.contacts[0].normal == Vector2.up && isSecondary == false)
         {
-            gameObject.GetComponent<Animator>().SetBool("OnPlatform", false);
+            OnStandingEnter(false);
         }
     }
 }
