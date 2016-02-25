@@ -226,6 +226,9 @@
     <Compile Include="Assets\AirConsole\scripts\WebsocketListener.cs" />
     <Compile Include="Assets\Scripts\BeeScript.cs" />
     <Compile Include="Assets\Scripts\ControllerInterface.cs" />
+    <Compile Include="Assets\Scripts\Data\HumanPlayer.cs" />
+    <Compile Include="Assets\Scripts\Data\Message.cs" />
+    <Compile Include="Assets\Scripts\Data\Team.cs" />
     <Compile Include="Assets\Scripts\DeadSpriteScript.cs" />
     <Compile Include="Assets\Scripts\DebugScript.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />

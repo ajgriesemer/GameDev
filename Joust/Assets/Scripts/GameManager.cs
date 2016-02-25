@@ -9,54 +9,6 @@ using Newtonsoft.Json.Linq;
 
 public class GameManager : MonoBehaviour
 {
-    // message classes for standardizing message format that is broadcast to airconsole controllers
-    public class Message<T> : Message
-    {
-        public T Data { get; private set; }
-
-        public Message(string type, T data)
-            : base(type)
-        {
-            this.Data = data;
-        }
-    }
-
-    public class Message
-    {
-        public string Type { get; private set; }
-
-        public Message(string type)
-        {
-            this.Type = type;
-        }
-    }
-    
-    // class for holding team info
-    public class Team
-    {
-        public string Color { get; private set; }
-        public List<HumanPlayer> Players { get; private set; }
-
-        public Team(string color)
-        {
-            this.Color = color;
-            this.Players = new List<HumanPlayer>();
-        }
-    }
-    
-    // class for holding player info
-    public class HumanPlayer
-    {
-        public int DeviceId { get; private set; }
-        public bool IsReady { get; set; }
-
-        public HumanPlayer(int deviceId)
-        {
-            this.DeviceId = deviceId;
-            this.IsReady = false;
-        }
-    }
-    
     // singleton instance of the GameManager
     public static GameManager instance = null;
 
