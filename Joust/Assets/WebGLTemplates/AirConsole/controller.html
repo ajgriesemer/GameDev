@@ -50,11 +50,14 @@
 	    airconsole.setCustomDeviceStateProperty('isPlayerReady', isPlayerReady);
 	}
 
-	function setTeam(team) {
-	    playerTeam = team;
+	function setTeam(color) {
+	    playerTeam = color;
 
-	    var teamText = document.getElementById("team_name");
-	    teamText.innerHTML = playerTeam;
+        // find all elements with the container class and update their background color
+	    var containers = document.getElementsByClassName("container");
+	    for (var i = 0; i < containers.length; i++) {
+	        containers[i].style.backgroundColor = color;
+	    }
 	}
 
 	function setCountdownTime(time) {
@@ -68,6 +71,12 @@
 	        element.classList.remove('hidden');
 	    else
 	        element.classList.add('hidden');
+	}
+
+	function move(direction, active) {
+	    var message = {};
+	    message[direction] = active;
+	    airconsole.message(AirConsole.SCREEN, message)
 	}
 
     </script>
@@ -85,40 +94,69 @@
             background-color: black;
         }
 
-        .button {
-            display: inline-block;
-            height: 45%;
-            width: 98%;
-            background-color: #222;
+        .container {
+            overflow:hidden;
+            width:90%;
+            height: 50%;
+            margin-left: auto;
+            margin-right: auto;
             position: relative;
+            transform: translateY(50%);
+        }
+
+        .button {
+            float: left;
+            height: 100%;
+            background-color: #222;
             color: #fff;
+        }
+
+        .center-button {
+            margin-left: 25%;
+            width: 50%;
         }
 
         .inline-section > div {
             display: inline;
         }
 
+        div .middle-text {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
         .hidden {
-            display: none
+            display: none;
         }
     </style>
 </head>
 <body onload="init()">
     <div id="menu_controls">
-        <div style="height: 5%"></div>
-        <button id="ready_button" class="button" ontouchstart="togglePlayerReady()" onmousedown="togglePlayerReady()">Not Ready</button>
-        <div id="team_name">Unknown</div>
+        <div class="container">
+            <button id="ready_button" class="button center-button" ontouchstart="togglePlayerReady()" onmousedown="togglePlayerReady()">Not Ready</button>
+        </div>
     </div>
     <div id="countdown_controls" class="hidden">
-        <div style="height: 25%"></div>
-        <div class="inline-section">
-            <div>Game starts in </div>
-            <div id="countdown"></div>
+        <div class="container" style="background-color: blue">
+            <div class="inline-section middle-text ">
+                <div>Game starts in </div>
+                <div id="countdown"></div>
+            </div>
         </div>
     </div>
     <div id="game_controls" class="hidden">
-        <div style="height: 25%"></div>
-        <div>Controller goes here!</div>
+        <div class="container">
+            <button id="left_button" class="button" style="width: 25%; margin-right: 3%"
+                ontouchstart="move('left', true)" ontouchend="move('left', false)"
+                onmousedown="move('left', true)" onmouseup="move('left', false)">Left</button>
+            <button id="right_button" class="button" style="width: 25%;  margin-right: 17%"
+                ontouchstart="move('right', true)" ontouchend="move('right', false)"
+                onmousedown="move('right', true)" onmouseup="move('right', false)">Right</button>
+            <button id="up_button" class="button" style="width: 30%"
+                ontouchstart="move('up', true)" ontouchend="move('up', false)"
+                onmousedown="move('up', true)" onmouseup="move('up', false)">Up</button>
+        </div>
     </div>
 </body>
 </html>

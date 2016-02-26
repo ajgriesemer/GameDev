@@ -48,8 +48,8 @@ public class GameManager : MonoBehaviour
         // create teams
         this.Teams = new List<Team>
         {
-            new Team("Blue"),
-            new Team("Green")
+            new Team("blue"),
+            new Team("green")
         };
 
         // set the menu text
@@ -160,6 +160,6 @@ public class GameManager : MonoBehaviour
 
     private void AirConsole_onMessage(int from, JToken data)
     {
-        Debug.Log(string.Format("Message received: {0}", data));
+        Debug.Log(string.Format("Message received from device id {0}: {1}", from, data));
     }
 }
