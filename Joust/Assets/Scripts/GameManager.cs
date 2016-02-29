@@ -24,7 +24,8 @@ public class GameManager : MonoBehaviour
 
     public int numTeams = 2;
     public int countdownTime = 3;
-    public Text CountdownText;
+    public Text countdownText;
+    public GameObject playerObject;
 
     public void StartGame()
     {
@@ -45,21 +46,49 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
 
-        // create teams
+        // create teams. there should be at least two
         this.Teams = new List<Team>
         {
-            new Team("blue"),
-            new Team("green")
+            new Team(0, "blue"),
+            new Team(1, "green")
         };
 
+        // if the number of teams is set to three (or higher), add a third team. 
+        if (numTeams >= 3)
+        {
+            this.Teams.Add(new Team(2, "white"));
+        }
+
         // set the menu text
-        this.CountdownText.text = "";
+        this.countdownText.text = "";
 
         // register airconsole events
         AirConsole.instance.onConnect += AirConsole_onConnect;
         AirConsole.instance.onDisconnect += AirConsole_onDisconnect;
         AirConsole.instance.onCustomDeviceStateChange += AirConsole_onCustomDeviceStateChange;
         AirConsole.instance.onMessage += AirConsole_onMessage;
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        //TODO: How to associate level number with scene name?
+        // level 1 is currently main scene
+        if (level == 1)
+        {
+            // instantiate a bee for each player
+            foreach(var team in this.Teams)
+            {
+                var teamNumber = team.Number;
+                foreach(var player in team.Players)
+                {
+                    player.Bee = Instantiate(playerObject, new Vector3(), Quaternion.identity) as GameObject;
+
+                    var beeScript = player.Bee.GetComponent<BeeScript>();
+                    beeScript.TeamNumber = teamNumber;
+                    beeScript.PlayerNumber = player.Number;
+                }
+            }
+        }
     }
 
     private void UpdatePlayerCount()
@@ -92,13 +121,13 @@ public class GameManager : MonoBehaviour
         for (int i = seconds; i > 0; i--)
         {
             // update the menu text and controllers with the time remaining until start
-            this.CountdownText.text = "Starting in " + i;
+            this.countdownText.text = "Starting in " + i;
             AirConsole.instance.Broadcast(new Message<int>(COUNTDOWN_MESSAGE, i));
 
             yield return new WaitForSeconds(1);
         }
 
-        this.CountdownText.text = "GO!";
+        this.countdownText.text = "GO!";
         this.StartGame();
     }
 
@@ -108,6 +137,7 @@ public class GameManager : MonoBehaviour
         var smallestTeam = this.Teams.First(t => t.Players.Count == leastTeamMembers);
 
         smallestTeam.Players.Add(player);
+
         AirConsole.instance.Message(player.DeviceId, new Message<string>(TEAM_MESSAGE, smallestTeam.Color));
     }
 
@@ -117,6 +147,9 @@ public class GameManager : MonoBehaviour
 
         this.Players.Add(player);
         this.AssignToTeam(player);
+
+        // give the player the smallest number not yet assigned
+        player.Number = this.GetNextNumber(this.Players.Select(p => p.Number));
 
         this.UpdatePlayerCount();
     }
@@ -161,5 +194,47 @@ public class GameManager : MonoBehaviour
     private void AirConsole_onMessage(int from, JToken data)
     {
         Debug.Log(string.Format("Message received from device id {0}: {1}", from, data));
+
+        var player = this.Players.FirstOrDefault(p => p.DeviceId == from);
+        if (player != null && player.Bee != null)
+        {
+            //TODO: we shouldn't be referencing the bee script, this should be hidden within the bee class
+            var beeScript = player.Bee.GetComponent<BeeScript>();
+
+
+            bool left = data["left"] != null ? (bool)data["left"] : false;
+            bool right = data["right"] != null ? (bool)data["right"] : false;
+            bool up = data["up"] != null ? (bool)data["up"] : false;
+
+            int horizontal = 0;
+            if (left && !right)
+                horizontal = -1;
+            else if (!left && right)
+                horizontal = 1;
+
+            beeScript.MoveBee(horizontal, up);
+        }
+    }
+
+    private int GetNextNumber(IEnumerable<int> numbers)
+    {
+        if (numbers != null)
+        {
+            var numberList = numbers.ToList();
+
+            if (numberList.Any())
+            {
+                var missingNumbers = Enumerable.Range(1, numberList.Max()).Except(numberList).ToList();
+
+                if (missingNumbers.Any())
+                {
+                    return missingNumbers.Min();
+                }
+
+                return numberList.Max() + 1;
+            }
+        }
+
+        return 1;
     }
 }

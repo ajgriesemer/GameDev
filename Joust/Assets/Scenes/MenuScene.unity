@@ -972,6 +972,14 @@ Prefab:
       propertyPath: CountdownText
       value: 
       objectReference: {fileID: 59878790}
+    - target: {fileID: 11411058, guid: 75373e779dd333744a01227a93f64272, type: 2}
+      propertyPath: playerObject
+      value: 
+      objectReference: {fileID: 149724, guid: 1af50bb2178f8514f8515f31bff4e158, type: 2}
+    - target: {fileID: 11411058, guid: 75373e779dd333744a01227a93f64272, type: 2}
+      propertyPath: countdownText
+      value: 
+      objectReference: {fileID: 59878790}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 75373e779dd333744a01227a93f64272, type: 2}
   m_IsPrefabParent: 0
