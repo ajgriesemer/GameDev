@@ -88,6 +88,7 @@ public class BeeScript : MonoBehaviour
             {
                 if (mainSprite.transform.position.x > 0)
                 {
+                    //Create secondary sprite on left side of screen
                     secondarySprite = Instantiate(mainSprite, new Vector3(mainSprite.transform.position.x - 2 * halfScreenWidth, mainSprite.transform.position.y, 0), Quaternion.identity) as GameObject;
                     //Rename the object to prevent multiple (clone) labels from being added
                     secondarySprite.name = mainSprite.name;
@@ -96,6 +97,7 @@ public class BeeScript : MonoBehaviour
                 }
                 else
                 {
+                    //Create secondary sprite on right side of screen
                     secondarySprite = Instantiate(mainSprite, new Vector3(mainSprite.transform.position.x + 2 * halfScreenWidth, mainSprite.transform.position.y, 0), Quaternion.identity) as GameObject;
                     //Rename the object to prevent multiple (clone) labels from being added
                     secondarySprite.name = mainSprite.name;
@@ -107,7 +109,9 @@ public class BeeScript : MonoBehaviour
             {
                 if (mainSprite.transform.position.x > (halfScreenWidth + halfSpriteWidth) || mainSprite.transform.position.x < -(halfScreenWidth + halfSpriteWidth))
                 {
+                    //Make the secondary sprite the main sprite
                     secondarySprite.gameObject.GetComponent<Rigidbody2D>().velocity = mainSprite.gameObject.GetComponent<Rigidbody2D>().velocity;
+                    secondarySprite.GetComponent<MountScript>().horizontalInput = mainSprite.GetComponent<MountScript>().horizontalInput;
                     secondarySprite.GetComponent<Rigidbody2D>().isKinematic = false;
                     mainSprite.GetComponent<MountScript>().OnBeeDeath -= KillBee;
                     mainSprite.GetComponent<MountScript>().OnStandingEnter -= StartStanding;
@@ -122,6 +126,7 @@ public class BeeScript : MonoBehaviour
                 }
                 else
                 {
+                    //Move secondary sprite with main sprite
                     secondarySprite.gameObject.GetComponent<Rigidbody2D>().velocity = mainSprite.GetComponent<Rigidbody2D>().velocity;
                 }
             }

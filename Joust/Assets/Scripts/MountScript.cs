@@ -7,8 +7,8 @@ public delegate void StandingEnter(bool standing);
 public class MountScript : MonoBehaviour
 {
     public bool isSecondary = false;
-    private float horizontalInput = 0;
-    private bool upInput = false;
+    public float horizontalInput = 0;
+    public bool upInput = false;
     public event PlayerDeath OnBeeDeath;
     public event StandingEnter OnStandingEnter;
 
@@ -71,7 +71,7 @@ public class MountScript : MonoBehaviour
 
             if (upInput == true)
             {
-                gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 10);
+                gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 50);
                 upInput = false;
             }
         }
