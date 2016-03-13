@@ -8,6 +8,7 @@ public class Team
 
     public Team(int number, string color)
     {
+        this.Number = number;
         this.Color = color;
         this.Players = new List<HumanPlayer>();
     }
