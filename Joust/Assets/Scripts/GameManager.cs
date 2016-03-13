@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
                 var teamNumber = team.Number;
                 foreach(var player in team.Players)
                 {
-                    player.Bee = Instantiate(playerObject, new Vector3(), Quaternion.identity) as GameObject;
+                    player.Bee = Instantiate(playerObject, new Vector3((int)Mathf.Pow(-1, teamNumber), -1), Quaternion.identity) as GameObject;
 
                     var beeScript = player.Bee.GetComponent<BeeScript>();
                     beeScript.TeamNumber = teamNumber;

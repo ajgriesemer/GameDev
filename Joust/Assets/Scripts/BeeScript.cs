@@ -17,7 +17,7 @@ public class BeeScript : MonoBehaviour
     void Start()
     {
         //When the Bee object is first created instantiate the mainSprite in the center of the screen
-        mainSprite = (GameObject)Instantiate(warriorPrefab, new Vector3(0, 1), Quaternion.identity);
+        mainSprite = (GameObject)Instantiate(warriorPrefab, this.transform.position, Quaternion.identity);
 
         mainSprite.name = warriorPrefab.name;
         mainSprite.GetComponent<MountScript>().OnBeeDeath += KillBee;
