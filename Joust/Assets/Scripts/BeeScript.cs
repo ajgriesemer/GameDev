@@ -12,16 +12,19 @@ public class BeeScript : MonoBehaviour
     public Sprite[] RiderArray;
     public RuntimeAnimatorController[] MountArray;
     private bool lastStandingState = false;
+    private SpriteBase mainSpriteScript;
+    private SpriteBase secondarySpriteScript;
 
     // Use this for initialization
     void Start()
     {
         //When the Bee object is first created instantiate the mainSprite in the center of the screen
         mainSprite = (GameObject)Instantiate(warriorPrefab, this.transform.position, Quaternion.identity);
+        mainSpriteScript = mainSprite.GetComponent<MountScript>();
 
         mainSprite.name = warriorPrefab.name;
-        mainSprite.GetComponent<MountScript>().OnBeeDeath += KillBee;
-        mainSprite.GetComponent<MountScript>().OnStandingEnter += StartStanding;
+        mainSpriteScript.OnBeeDeath += KillBee;
+        mainSpriteScript.OnStandingEnter += StartStanding;
 
         mainSprite.GetComponent<Animator>().runtimeAnimatorController = MountArray[TeamNumber];
         mainSprite.transform.Find("Rider").GetComponent<SpriteRenderer>().sprite = RiderArray[PlayerNumber];
@@ -31,8 +34,8 @@ public class BeeScript : MonoBehaviour
     {
         Vector3 spritePosition = mainSprite.transform.position;
 
-        mainSprite.GetComponent<MountScript>().OnBeeDeath -= KillBee;
-        mainSprite.GetComponent<MountScript>().OnStandingEnter -= StartStanding;
+        mainSpriteScript.OnBeeDeath -= KillBee;
+        mainSpriteScript.OnStandingEnter -= StartStanding;
 
         Destroy(mainSprite);
         mainSprite = Instantiate(deadPrefab, spritePosition, Quaternion.identity) as GameObject;
@@ -90,6 +93,7 @@ public class BeeScript : MonoBehaviour
                 {
                     //Create secondary sprite on left side of screen
                     secondarySprite = Instantiate(mainSprite, new Vector3(mainSprite.transform.position.x - 2 * halfScreenWidth, mainSprite.transform.position.y, 0), Quaternion.identity) as GameObject;
+                    secondarySpriteScript = secondarySprite.GetComponent<MountScript>();
                     //Rename the object to prevent multiple (clone) labels from being added
                     secondarySprite.name = mainSprite.name;
                     secondarySprite.SendMessage("StandingAnimation", lastStandingState);
@@ -99,6 +103,7 @@ public class BeeScript : MonoBehaviour
                 {
                     //Create secondary sprite on right side of screen
                     secondarySprite = Instantiate(mainSprite, new Vector3(mainSprite.transform.position.x + 2 * halfScreenWidth, mainSprite.transform.position.y, 0), Quaternion.identity) as GameObject;
+                    secondarySpriteScript = secondarySprite.GetComponent<MountScript>();
                     //Rename the object to prevent multiple (clone) labels from being added
                     secondarySprite.name = mainSprite.name;
                     secondarySprite.SendMessage("StandingAnimation", lastStandingState);
@@ -111,14 +116,14 @@ public class BeeScript : MonoBehaviour
                 {
                     //Make the secondary sprite the main sprite
                     secondarySprite.gameObject.GetComponent<Rigidbody2D>().velocity = mainSprite.gameObject.GetComponent<Rigidbody2D>().velocity;
-                    secondarySprite.GetComponent<MountScript>().horizontalInput = mainSprite.GetComponent<MountScript>().horizontalInput;
+                    secondarySpriteScript.horizontalInput = mainSpriteScript.horizontalInput;
                     secondarySprite.GetComponent<Rigidbody2D>().isKinematic = false;
                     mainSprite.GetComponent<MountScript>().OnBeeDeath -= KillBee;
                     mainSprite.GetComponent<MountScript>().OnStandingEnter -= StartStanding;
 
                     Destroy(mainSprite);
                     mainSprite = secondarySprite;
-
+                    mainSpriteScript = secondarySpriteScript;
                     mainSprite.GetComponent<MountScript>().OnBeeDeath += KillBee;
                     mainSprite.GetComponent<MountScript>().OnStandingEnter += StartStanding;
 

@@ -1,23 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-
-public class DeadSpriteScript : MonoBehaviour {
+public class DeadSpriteScript : SpriteBase
+{
     
     // Use this for initialization
     void Start () {
-	
 	}
 
-    void Jump(bool up)
+    public override void Jump(bool up)
     {
     }
 
-    void MoveHorizontal(float input)
+    public override void  MoveHorizontal(float input)
     {
     }
-
-    void StandingAnimation(bool standing)
+    public override void StandingAnimation(bool standing)
     {
     }
 
@@ -35,4 +34,5 @@ public class DeadSpriteScript : MonoBehaviour {
             GetComponent<SpriteRenderer>().flipX = true;
         }*/
 	}
+
 }

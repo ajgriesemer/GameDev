@@ -1,17 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public delegate void PlayerDeath();
-public delegate void StandingEnter(bool standing);
 
-public class MountScript : MonoBehaviour
+public class MountScript : SpriteBase
 {
-    public bool isSecondary = false;
-    public float horizontalInput = 0;
-    public bool upInput = false;
-    public event PlayerDeath OnBeeDeath;
-    public event StandingEnter OnStandingEnter;
-
     // Use this for initialization
     void Start()
     {
@@ -32,17 +24,17 @@ public class MountScript : MonoBehaviour
         }
     }
 
-    void Jump(bool up)
+    public override void Jump(bool up)
     {
         upInput = up;
     }
 
-    void MoveHorizontal(float input)
+    public override void MoveHorizontal(float input)
     {
         horizontalInput = input;
     }
 
-    void StandingAnimation(bool standing)
+    public override void StandingAnimation(bool standing)
     {
         gameObject.GetComponent<Animator>().SetBool("OnPlatform", standing);
     }
@@ -84,15 +76,12 @@ public class MountScript : MonoBehaviour
             Debug.Log("Collision");
             if (coll.gameObject.transform.position.y > gameObject.transform.position.y)
             {
-                if (OnBeeDeath != null)
-                {
-                    OnBeeDeath();
-                }
+                FireOnBeeDeath();
             }
         }
         if (coll.gameObject.tag == "Terrain" && coll.contacts[0].normal == Vector2.up && isSecondary == false)
         {
-            OnStandingEnter(true);
+            FireOnStandingEnter(true);
         }
     }
 
@@ -100,7 +89,7 @@ public class MountScript : MonoBehaviour
     {
         if (coll.gameObject.tag == "Terrain" && coll.contacts[0].normal == Vector2.up && isSecondary == false)
         {
-            OnStandingEnter(false);
+            FireOnStandingEnter(false);
         }
     }
 }
